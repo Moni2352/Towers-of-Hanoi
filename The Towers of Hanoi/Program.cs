@@ -77,8 +77,27 @@ void Play()
 {
     int moves = 0;
     bool exit = false;
+    Stack<int> Lane1 = new();
+    Stack<int> Lane2 = new();
+    Stack<int> Lane3 = new();
+
+    Dictionary<int, Stack<int>> convert = new Dictionary<int, Stack<int>>
+    {
+        {1, Lane1},
+        {2, Lane2},
+        {3, Lane3}
+    };
+
+    int? holder = null;
+
+    for (int i = stackCount; i > 0; i--) // Initializes Placement
+    {
+        Lane1.Push(i);
+    }
+
     Console.Clear();
     Console.WriteLine($"Towers Of Hanoi | Current Moves ({moves}) | Tower Count ({stackCount}) | Hot Keys (?)");
+    Render();
     while (!exit)
     {    
         char keyinput = returnedCharacter(['q', '1', '2', '3', 'r', '?']);
@@ -87,15 +106,14 @@ void Play()
         switch (keyinput)
         {
             case '1':
-
+                Move(1);
                 break;
-            
             case '2':
-
+                Move(2);
                 break;
             
             case '3':
-
+                Move(3);
                 break;
             
             case 'q':
@@ -110,14 +128,43 @@ void Play()
                 Hotkeys();
                 break;
         }
+        Console.Clear();
+        Console.WriteLine($"Towers Of Hanoi | Current Moves ({moves}) | Tower Count ({stackCount}) | Hot Keys (?)");
         Render();
+        if (Lane3.Count == stackCount)
+        {
+            int minimumMoves = (int)Math.Pow(2,stackCount) - 1;
+            Console.WriteLine($"Congrats!! You win | Moves Used: {moves} | Minimum possible moves: {minimumMoves}");
+            //Console.ReadKey(true);
+        }
     }
     exit = false;
     return;
 
+    void Move(int lane)
+    {
+        if (holder.HasValue) // Has a block in holder
+        {
+
+            if (convert[lane].Count > 0 && holder > convert[lane].Peek())
+            {
+                return;
+            }
+            convert[lane].Push(holder.Value);
+            holder = null;
+            moves++;
+            
+        } else if (convert[lane].Count > 0) // No block in holder
+        {
+            holder = convert[lane].Pop();
+        }
+    }
+
     void Render()
     {
-        Console.WriteLine("########");
+        Console.WriteLine(string.Join(", ", Lane1));
+        Console.WriteLine(string.Join(", ", Lane2));
+        Console.WriteLine(string.Join(", ", Lane3));
         return;
     }
 
