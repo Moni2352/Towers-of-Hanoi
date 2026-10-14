@@ -1,0 +1,148 @@
+﻿int stackCount = 3;
+
+while (true)
+{
+    char option = Intro();
+    switch(option)
+    {
+        case 'p':
+            Play();
+            break;
+
+        case 's':
+            Settings();
+            break;
+
+        case 'q':
+            Environment.Exit(1);
+            break;
+    } 
+}
+
+char Intro()
+{
+    Console.Clear();
+    Console.WriteLine("Welcome To The Towers Of Hanoi \n");
+    Console.WriteLine("P : Play");
+    Console.WriteLine("S : Settings");
+    Console.WriteLine("Q : Quit");
+    
+    return returnedCharacter(['p', 's', 'q']);
+}
+
+char returnedCharacter(char[] AllowedCharacters)
+{
+    char input = '+';
+    char[] allowed = AllowedCharacters;
+    while (!allowed.Contains(input))
+    {
+        input = char.ToLower(Console.ReadKey(true).KeyChar);
+    }
+    return input;
+}
+
+void Settings()
+{
+    settings:
+    Console.Clear();
+    Console.WriteLine("Settings \n");
+    Console.WriteLine($"C : Stack Count ({stackCount})");
+    Console.WriteLine("Q : Return");
+
+    char returned = returnedCharacter(['c', 'q']);
+
+    switch(returned)
+    {
+        case 'c':
+            SettingsStackCount();
+            goto settings;
+        case 'q':
+            return;
+
+    }
+
+    void SettingsStackCount ()
+    {
+        Console.Clear();
+        Console.WriteLine($"Enter New number of stack pieces ({stackCount})");
+        string input = Console.ReadLine();
+        if (input == "") {return;}
+        int newStackCount = int.Parse(input);
+        stackCount = newStackCount;
+        return;
+    }
+}
+
+void Play()
+{
+    int moves = 0;
+    bool exit = false;
+    Console.Clear();
+    Console.WriteLine($"Towers Of Hanoi | Current Moves ({moves}) | Tower Count ({stackCount}) | Hot Keys (?)");
+    while (!exit)
+    {    
+        char keyinput = returnedCharacter(['q', '1', '2', '3', 'r', '?']);
+        Console.Clear();
+        Console.WriteLine($"Towers Of Hanoi | Current Moves ({moves}) | Tower Count ({stackCount}) | Hot Keys (?)");
+        switch (keyinput)
+        {
+            case '1':
+
+                break;
+            
+            case '2':
+
+                break;
+            
+            case '3':
+
+                break;
+            
+            case 'q':
+                exit = true;
+                break;
+            
+            case 'r':
+                Reset();
+                break;
+            
+            case '?':
+                Hotkeys();
+                break;
+        }
+        Render();
+    }
+    exit = false;
+    return;
+
+    void Render()
+    {
+        Console.WriteLine("########");
+        return;
+    }
+
+    void Hotkeys()
+    {
+        Console.Clear();
+        Console.WriteLine("? : Check Hotkeys");
+        Console.WriteLine("R : Reset Game");
+        Console.WriteLine("Q : Return To Menu");
+        Console.WriteLine("1 : Pick/Place at 1");
+        Console.WriteLine("2 : Pick/Place at 2");
+        Console.WriteLine("3 : Pick/Place at 3");
+        Console.ReadKey(true);
+        Console.Clear();
+        Console.WriteLine($"Towers Of Hanoi | Current Moves ({moves}) | Tower Count ({stackCount}) | Hot Keys (?)");
+        return;
+    }
+
+    void Reset()
+    {
+        moves = 0;
+    }
+}
+
+
+Console.WriteLine("Congrats!! You somehow reached the end of this program \nThis should not be possible \nUpon any press, this game will close");
+Console.ReadKey(true);
+Environment.Exit(0);
