@@ -165,7 +165,24 @@ void Play()
         Console.WriteLine(string.Join(", ", Lane1));
         Console.WriteLine(string.Join(", ", Lane2));
         Console.WriteLine(string.Join(", ", Lane3));
+
+        int totalwidth = (stackCount*6)-1;
+        List<string> rowContents = new();
+
+        for (int i = 0; i<stackCount; i++)
+        {
+            rowContents.Clear();
+            RenderLayer(i);
+        }
         return;
+
+        void RenderLayer(int layer)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                
+            }
+        }
     }
 
     void Hotkeys()
