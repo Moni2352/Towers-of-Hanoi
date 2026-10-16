@@ -162,6 +162,7 @@ void Play()
 
     void Render()
     {
+        //Show Raw Values
         Console.WriteLine(string.Join(", ", Lane1));
         Console.WriteLine(string.Join(", ", Lane2));
         Console.WriteLine(string.Join(", ", Lane3));
@@ -178,10 +179,62 @@ void Play()
 
         void RenderLayer(int layer)
         {
-            for (int i = 0; i < 3; i++)
+            List<string> output = new();
+            output.Add("|");
+            if (Lane1.Count < stackCount-layer && Lane2.Count < stackCount-layer && Lane3.Count < stackCount-layer)
             {
                 
+                for (int i = 0; i < totalwidth; i++)
+                {
+                    if (i == stackCount*2 - 1 || i == stackCount*4 - 1)
+                    {
+                        output.Add("|");
+                    } else
+                    {
+                    output.Add("  ");   
+                    }
+                }
+                output.Add("|");
+                Console.WriteLine(string.Join("", output));
+                return;
             }
+            for (int i = 0; i < 3; i++)
+            {
+                output.AddRange(PartialLayer(layer,i+1));
+                if (i < 2) {output.Add("|");}
+            }
+            output.Add("|");
+            Console.WriteLine(string.Join("",output));
+            return;
+        }
+
+        List<string> PartialLayer (int layer, int lane)
+        {
+
+            //Initializes output list
+            int width = (stackCount*2) - 1;
+            List<string> output = new List<string>(width);
+            for (int i = 0; i < width; i++)
+            {
+                output.Add("  ");
+            }
+
+            //If lane count is less than stack count - layer then there is nothing there
+            if (convert[lane].Count < (stackCount - layer))
+            {
+                return output;
+            }
+
+            int diskoffset = convert[lane].Count - (stackCount - layer);
+            int diskwidth = convert[lane].ElementAt(diskoffset);
+            int diskbuffer = (width - (diskwidth*2 - 1))/2;
+
+            for (int i = 0; i < width; i++)
+            {
+                if (i < width - diskbuffer && i >= diskbuffer) {output[i] = "##";}
+            }
+            return output;
+
         }
     }
 
@@ -203,6 +256,15 @@ void Play()
     void Reset()
     {
         moves = 0;
+
+        Lane1.Clear();
+        Lane2.Clear();
+        Lane3.Clear();
+
+        for (int i = stackCount; i > 0; i--) // Initializes Placement
+    {
+        Lane1.Push(i);
+    }
     }
 }
 
